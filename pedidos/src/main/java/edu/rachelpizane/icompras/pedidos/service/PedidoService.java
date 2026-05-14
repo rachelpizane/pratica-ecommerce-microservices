@@ -1,13 +1,14 @@
 package edu.rachelpizane.icompras.pedidos.service;
 
 import edu.rachelpizane.icompras.pedidos.client.ServicoBancarioClient;
+import edu.rachelpizane.icompras.pedidos.dto.DadosPagamentoDTO;
 import edu.rachelpizane.icompras.pedidos.dto.NovoPedidoDTO;
 import edu.rachelpizane.icompras.pedidos.dto.RecebimentoCallBackPagamentoDTO;
 import edu.rachelpizane.icompras.pedidos.enums.PedidoStatus;
 import edu.rachelpizane.icompras.pedidos.exception.ValidationException;
 import edu.rachelpizane.icompras.pedidos.mapper.PedidoMapper;
+import edu.rachelpizane.icompras.pedidos.model.DadosPagamento;
 import edu.rachelpizane.icompras.pedidos.model.Pedido;
-import edu.rachelpizane.icompras.pedidos.repository.ItemPedidoRepository;
 import edu.rachelpizane.icompras.pedidos.repository.PedidoRepository;
 import edu.rachelpizane.icompras.pedidos.validator.PedidoValidator;
 import jakarta.transaction.Transactional;
@@ -45,12 +46,38 @@ public class PedidoService {
         repository.save(pedido);
     }
 
+    @Transactional
+    public void adicionarNovoPagamento(Long id, DadosPagamentoDTO dados) {
+        Pedido pedido = buscarPedido(id);
+
+        atualizarPagamento(pedido, dados);
+        processarPagamento(pedido);
+
+        repository.save(pedido);
+    }
+
+    private Pedido buscarPedido(Long id) {
+        return repository
+                .findById(id)
+                .orElseThrow(() -> new ValidationException("id",
+                        String.format("Pedido não encontrado para o id %d",
+                                id)));
+    }
+
+
     private Pedido buscarPedido(Long id, String chavePagamento) {
         return repository
                 .findByIdAndChavePagamento(id, chavePagamento)
                 .orElseThrow(() -> new ValidationException("codigo",
                         String.format("Pedido não encontrado para o código %d e chave de pagamento %s",
                                 id, chavePagamento)));
+    }
+
+    private void atualizarPagamento(Pedido pedido, DadosPagamentoDTO dto) {
+        DadosPagamento dados = new DadosPagamento(dto.dados(), dto.tipoPagamento());
+        pedido.setDadosPagamento(dados);
+        pedido.setStatus(PedidoStatus.REALIZADO);
+        pedido.setObservacoes("Novo pagamento realizado, aguardando o novo processamento");
     }
 
     private Pedido realizarPersistenciaInicial(NovoPedidoDTO request) {

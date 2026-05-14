@@ -1,5 +1,6 @@
 package edu.rachelpizane.icompras.pedidos.mapper;
 
+import edu.rachelpizane.icompras.pedidos.dto.DadosPagamentoDTO;
 import edu.rachelpizane.icompras.pedidos.dto.ItemPedidoDTO;
 import edu.rachelpizane.icompras.pedidos.dto.NovoPedidoDTO;
 import edu.rachelpizane.icompras.pedidos.model.ItemPedido;
