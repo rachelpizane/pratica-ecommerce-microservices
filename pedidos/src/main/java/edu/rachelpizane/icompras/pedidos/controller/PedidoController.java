@@ -1,6 +1,8 @@
 package edu.rachelpizane.icompras.pedidos.controller;
 
+import edu.rachelpizane.icompras.pedidos.dto.ErrorRespostaDTO;
 import edu.rachelpizane.icompras.pedidos.dto.NovoPedidoDTO;
+import edu.rachelpizane.icompras.pedidos.exception.ValidationException;
 import edu.rachelpizane.icompras.pedidos.model.Pedido;
 import edu.rachelpizane.icompras.pedidos.service.PedidoService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +20,19 @@ public class PedidoController {
     private final PedidoService service;
 
     @PostMapping
-    public ResponseEntity<Long> criar(@RequestBody NovoPedidoDTO request) {
-        Pedido pedido = service.criar(request);
+    public ResponseEntity<Object> criar(@RequestBody NovoPedidoDTO request) {
+        try {
+            Pedido pedido = service.criar(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(pedido.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(pedido.getId());
+
+        } catch (ValidationException ex) {
+            ErrorRespostaDTO errorResposta = new ErrorRespostaDTO(
+                    "DADOS_INVALIDOS",
+                    ex.getField(),
+                    ex.getMessage());
+
+            return ResponseEntity.badRequest().body(errorResposta);
+        }
     }
 }
