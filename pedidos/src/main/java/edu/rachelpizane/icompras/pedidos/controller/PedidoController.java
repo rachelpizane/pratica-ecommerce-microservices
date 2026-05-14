@@ -18,7 +18,7 @@ public class PedidoController {
     private final PedidoService service;
 
     @PostMapping
-    public ResponseEntity criar(@RequestBody NovoPedidoDTO request) {
+    public ResponseEntity<Long> criar(@RequestBody NovoPedidoDTO request) {
         Pedido pedido = service.criar(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(pedido.getId());
