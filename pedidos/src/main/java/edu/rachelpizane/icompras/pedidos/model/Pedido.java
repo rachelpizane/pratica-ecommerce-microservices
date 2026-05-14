@@ -2,10 +2,7 @@ package edu.rachelpizane.icompras.pedidos.model;
 
 import edu.rachelpizane.icompras.pedidos.enums.PedidoStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -45,8 +42,12 @@ public class Pedido {
 
     private String urlNf;
 
+    @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens = new ArrayList<>();
+
+    @Transient
+    private DadosPagamento dadosPagamento;
 
     @PrePersist
     private void prePersist() {
@@ -55,6 +56,21 @@ public class Pedido {
         }
         if (status == null) {
             status = PedidoStatus.REALIZADO;
+        }
+    }
+
+    public void addItemPedido(ItemPedido item) {
+        itens.add(item);
+        item.setPedido(this);
+    }
+
+    public void addTodosItemPedido(List<ItemPedido> items) {
+        if (items == null || items.isEmpty()) return;
+
+        for (ItemPedido item : items) {
+            if (item != null) {
+                addItemPedido(item);
+            }
         }
     }
 }
