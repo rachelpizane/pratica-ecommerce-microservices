@@ -1,8 +1,6 @@
 package edu.rachelpizane.icompras.pedidos.controller;
 
-import edu.rachelpizane.icompras.pedidos.dto.DadosPagamentoDTO;
-import edu.rachelpizane.icompras.pedidos.dto.ErrorRespostaDTO;
-import edu.rachelpizane.icompras.pedidos.dto.NovoPedidoDTO;
+import edu.rachelpizane.icompras.pedidos.dto.*;
 import edu.rachelpizane.icompras.pedidos.exception.ValidationException;
 import edu.rachelpizane.icompras.pedidos.model.Pedido;
 import edu.rachelpizane.icompras.pedidos.service.PedidoService;
@@ -16,6 +14,23 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PedidoController {
     private final PedidoService service;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> buscar(@PathVariable Long id) {
+        try {
+            DetalhePedidoDTO response = service.buscarPedidoDetalhado(id);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+
+        } catch (ValidationException ex) {
+            ErrorRespostaDTO errorResposta = new ErrorRespostaDTO(
+                    "NAO_ENCONTRADO",
+                    ex.getField(),
+                    ex.getMessage());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResposta);
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Object> criar(@RequestBody NovoPedidoDTO request) {

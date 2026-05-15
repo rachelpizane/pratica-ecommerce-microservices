@@ -1,5 +1,6 @@
 package edu.rachelpizane.icompras.pedidos.model;
 
+import edu.rachelpizane.icompras.pedidos.client.representation.ProdutoRepresentation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,4 +33,7 @@ public class ItemPedido {
 
     @Column(precision = 16, scale = 2, nullable = false)
     private BigDecimal valorUnitario;
+
+    @Transient
+    ProdutoRepresentation produto;
 }

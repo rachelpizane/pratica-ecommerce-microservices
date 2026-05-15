@@ -1,5 +1,6 @@
 package edu.rachelpizane.icompras.pedidos.model;
 
+import edu.rachelpizane.icompras.pedidos.client.representation.ClienteRepresentation;
 import edu.rachelpizane.icompras.pedidos.enums.PedidoStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,6 +50,9 @@ public class Pedido {
     @Transient
     private DadosPagamento dadosPagamento;
 
+    @Transient
+    private ClienteRepresentation cliente;
+
     @PrePersist
     private void prePersist() {
         if (dataPedido == null) {
@@ -72,5 +76,9 @@ public class Pedido {
                 addItemPedido(item);
             }
         }
+    }
+
+    public void removeTodosItemPedido() {
+        itens.clear();
     }
 }
