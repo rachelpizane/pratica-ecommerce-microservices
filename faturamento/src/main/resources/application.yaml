@@ -7,6 +7,9 @@ spring:
 
   kafka:
     bootstrap-servers: 'http://localhost:29092'
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       group-id: icompras-faturamento
       auto-offset-reset: earliest
@@ -25,3 +28,4 @@ icompras:
       group-id: ${spring.kafka.consumer.group-id}
       topics:
         pedidos-pagos: icompras.pedidos-pagos
+        pedidos-faturados: icompras.pedidos-faturados
