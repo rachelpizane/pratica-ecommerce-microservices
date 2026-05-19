@@ -1,5 +1,6 @@
-package edu.rachelpizane.icompras.faturamento.config.props;
+package edu.rachelpizane.icompras.faturamento.config;
 
+import edu.rachelpizane.icompras.faturamento.config.props.MinioProps;
 import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
