@@ -10,6 +10,8 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: "atualizacao:edu.rachelpizane.icompras.faturamento.dto.AtualizacaoStatusPedidoDTO"
     consumer:
       group-id: icompras-faturamento
       auto-offset-reset: earliest
