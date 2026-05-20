@@ -1,3 +1,31 @@
+server:
+  port: 8084
+
 spring:
   application:
     name: logistica
+
+  kafka:
+    bootstrap-servers: 'http://localhost:29092'
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: "atualizacao:edu.rachelpizane.icompras.logistica.dto.AtualizacaoPedidoEnviadoDTO"
+    consumer:
+      group-id: icompras-atualizacao-logistica
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.type.mapping: "atualizacao:edu.rachelpizane.icompras.logistica.dto.AtualizacaoPedidoFaturadoDTO"
+        spring.json.trusted.packages: "*"
+
+icompras:
+  config:
+    kafka:
+      topics:
+        pedidos-faturados: icompras.pedidos-faturados
+        pedidos-enviados: icompras.pedidos-enviados
