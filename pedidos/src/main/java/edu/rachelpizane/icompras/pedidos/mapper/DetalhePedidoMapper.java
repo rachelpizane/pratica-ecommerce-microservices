@@ -15,5 +15,6 @@ public interface DetalhePedidoMapper {
     @Mapping(source = "cliente.email", target = "email")
     @Mapping(source = "cliente.telefone", target = "telefone")
     @Mapping(source = "dataPedido", target = "dataPedido", dateFormat = "yyyy-MM-dd")
+    @Mapping(source = "urlNf", target = "urlNotaFiscal")
     DetalhePedidoDTO toDto(Pedido pedido);
 }
