@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public record ProdutoRepresentation(
         Long id,
         String nome,
-        BigDecimal valorUnitario
+        BigDecimal valorUnitario,
+        boolean ativo
 ) {
 }

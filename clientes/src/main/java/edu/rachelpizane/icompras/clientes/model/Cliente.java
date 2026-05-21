@@ -37,4 +37,14 @@ public class Cliente {
 
     @Column(length = 20)
     private String telefone;
+
+    @Column(nullable = false)
+    private Boolean ativo;
+
+    @PrePersist
+    private void prePersist() {
+        if (ativo == null) {
+            ativo = true;
+        }
+    }
 }

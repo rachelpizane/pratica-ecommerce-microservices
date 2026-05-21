@@ -1,6 +1,9 @@
 package edu.rachelpizane.icompras.pedidos.validator;
 
+import edu.rachelpizane.icompras.pedidos.client.representation.ClienteRepresentation;
+import edu.rachelpizane.icompras.pedidos.client.representation.ProdutoRepresentation;
 import edu.rachelpizane.icompras.pedidos.dto.NovoPedidoDTO;
+import edu.rachelpizane.icompras.pedidos.exception.ValidationException;
 import edu.rachelpizane.icompras.pedidos.provider.ClienteProvider;
 import edu.rachelpizane.icompras.pedidos.provider.ProdutoProvider;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +23,18 @@ public class PedidoValidator {
     }
 
     private void validarCliente(Long idCliente) {
-        clienteProvider.buscarCliente(idCliente);
+        ClienteRepresentation cliente = clienteProvider.buscarCliente(idCliente);
+
+        if(!cliente.ativo()) {
+            throw new ValidationException("ativo", "Cliente inativado");
+        }
     }
 
     private void validarItem(Long idProduto) {
-        produtoProvider.buscarProduto(idProduto);
+        ProdutoRepresentation produto = produtoProvider.buscarProduto(idProduto);
+
+        if(!produto.ativo()) {
+            throw new ValidationException("ativo", "Produto inativado");
+        }
     }
 }

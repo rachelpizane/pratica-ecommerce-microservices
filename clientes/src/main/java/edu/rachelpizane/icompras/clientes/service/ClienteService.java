@@ -20,4 +20,9 @@ public class ClienteService {
     public Optional<Cliente> obterPorId(Long id) {
         return repository.findById(id);
     }
+
+    public void inativar(Cliente cliente) {
+        cliente.setAtivo(false);
+        repository.save(cliente);
+    }
 }

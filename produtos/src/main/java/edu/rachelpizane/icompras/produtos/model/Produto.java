@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,4 +25,14 @@ public class Produto {
 
     @Column(nullable = false, precision = 16, scale = 2)
     private BigDecimal valorUnitario;
+
+    @Column(nullable = false)
+    private Boolean ativo;
+
+    @PrePersist
+    private void prePersist() {
+        if (ativo == null) {
+            ativo = true;
+        }
+    }
 }
